@@ -23,6 +23,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);display
 .sb-logo{padding:22px 20px 16px;border-bottom:1px solid var(--b1)}
 .sb-logo h1{font-size:17px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#2563eb,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2}
 .sb-logo p{font-size:11px;color:var(--t3);margin-top:3px}
+.sb-home{display:flex;align-items:center;gap:6px;padding:9px 20px;font-size:11px;font-weight:600;color:var(--t3);text-decoration:none;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--b1);transition:color .2s}
+.sb-home:hover{color:var(--t1)}
 .sb-nav{padding:10px 0;flex:1}
 .nav-lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:10px 20px 4px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;font-size:13px;color:var(--t2);text-decoration:none;border-left:3px solid transparent;transition:all .2s;position:relative}
@@ -196,6 +198,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);display
     <h1>PTE Read Aloud<br>Master</h1>
     <p>Pronunciación para hispanohablantes</p>
   </div>
+  <a href="index.html" class="sb-home">← All Tools</a>
   <nav class="sb-nav">
     <div class="nav-lbl">Habilidades</div>
     <a href="#ed" class="nav-item" data-nav="ed" style="--ac:#7c3aed"><span class="nav-icon">🔤</span><span class="nav-title">Terminaciones -ED</span><span class="nav-ck" id="ck-ed"></span></a>
