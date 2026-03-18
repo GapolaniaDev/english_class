@@ -248,6 +248,8 @@ function showToast(msg) {
 
 ## GitHub Pages
 
+🌐 **Live site:** [https://gapolaniadev.github.io/english_class/](https://gapolaniadev.github.io/english_class/)
+
 Repository: `https://github.com/GapolaniaDev/english_class`
 
 `index.html` at the root is the entry point. Every new tool pushed to `main` is automatically deployed.
