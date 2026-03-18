@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Tenses Master | PTE Academic</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #4A90D9; --primary-dark: #2C6FAC;
+            --success: #27AE60; --error: #E74C3C; --warning: #F39C12;
+            --bg: #F0F4F8; --card: #FFFFFF; --text: #2D3748;
+            --text-light: #718096; --border: #E2E8F0;
+            --l1: #27AE60; --l2: #2980B9; --l3: #8E44AD; --l4: #E67E22; --l5: #E74C3C;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ── HEADER ── */
+        .header {
+            background: linear-gradient(135deg, #1a365d 0%, #2a69ac 100%);
+            color: white; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+        }
+        .header h1 { font-size: 1.2rem; font-weight: 700; }
+        .header-sub { font-size: 0.72rem; opacity: 0.75; margin-top: 2px; }
+        .header-stats { display: flex; gap: 24px; align-items: center; }
+        .stat-item { text-align: center; font-size: 0.72rem; opacity: 0.85; }
+        .stat-value { font-size: 1.25rem; font-weight: 700; color: #FFD700; display: block; }
+        .streak-val { color: #FF8C00; }
+
+        /* ── MAIN ── */
+        .main { max-width: 100%; margin: 0; padding: 24px 32px 60px; }
+
+        /* ── LEVEL NAV ── */
+        .level-nav { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+        .level-btn {
+            flex-shrink: 0; padding: 8px 16px; border: 2px solid transparent;
+            border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
+            background: white; color: var(--text); transition: all 0.2s;
+        }
+        .level-btn[data-lv="1"] { border-color: var(--l1); }
+        .level-btn[data-lv="1"].active { background: var(--l1); color: white; }
+        .level-btn[data-lv="2"] { border-color: var(--l2); }
+        .level-btn[data-lv="2"].active { background: var(--l2); color: white; }
+        .level-btn[data-lv="3"] { border-color: var(--l3); }
+        .level-btn[data-lv="3"].active { background: var(--l3); color: white; }
+        .level-btn[data-lv="4"] { border-color: var(--l4); }
+        .level-btn[data-lv="4"].active { background: var(--l4); color: white; }
+        .level-btn[data-lv="5"] { border-color: var(--l5); }
+        .level-btn[data-lv="5"].active { background: var(--l5); color: white; }
+
+        /* ── PROGRESS ── */
+        .progress-section {
+            background: white; border-radius: 12px; padding: 14px 20px;
+            margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.84rem; }
+        .level-title-text { font-weight: 700; color: var(--primary-dark); }
+        .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.5s ease; }
+
+        /* ── GRAMMAR REF ── */
+        .grammar-ref { background: #EBF8FF; border: 1px solid #BEE3F8; border-radius: 12px; margin-bottom: 18px; overflow: hidden; }
+        .grammar-ref-header {
+            padding: 12px 20px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; color: #2B6CB0; user-select: none; font-size: 0.9rem;
+        }
+        .grammar-ref-header:hover { background: #BEE3F8; }
+        .grammar-body { display: none; padding: 0 16px 16px; }
+        .grammar-body.open { display: block; }
+        .tense-card {
+            background: white; border-radius: 8px; padding: 12px 14px;
+            margin-top: 10px; border-left: 4px solid var(--primary);
+        }
+        .tense-card h4 { color: var(--primary-dark); margin-bottom: 6px; font-size: 0.88rem; }
+        .formula-tag {
+            font-family: monospace; background: #F7FAFC; padding: 3px 8px;
+            border-radius: 4px; font-size: 0.82rem; display: inline-block; margin-bottom: 6px;
+        }
+        .tense-uses { font-size: 0.8rem; color: var(--text-light); margin: 4px 0 6px 14px; }
+        .tense-uses li { margin-bottom: 2px; }
+        .tense-ex { font-size: 0.8rem; font-style: italic; color: #4A5568; margin-bottom: 2px; }
+
+        /* ── QUESTION CARD ── */
+        .q-card {
+            background: white; border-radius: 16px; padding: 26px 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+        .q-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+        .badge { padding: 3px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
+        .b-tense { background: #EBF8FF; color: #2B6CB0; }
+        .b-type  { background: #F0FFF4; color: #276749; }
+        .b-diff  { background: #FFFAF0; color: #744210; }
+        .q-instruction { font-size: 0.83rem; color: var(--text-light); font-style: italic; margin-bottom: 12px; }
+        .q-sentence { font-size: 1.1rem; line-height: 1.7; margin-bottom: 20px; }
+        .blank { display: inline-block; min-width: 110px; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 600; }
+
+        /* ── OPTIONS ── */
+        .options-grid { display: grid; gap: 10px; }
+        .opt-btn {
+            padding: 13px 18px; border: 2px solid var(--border); border-radius: 10px;
+            cursor: pointer; text-align: left; font-size: 0.93rem; background: white;
+            transition: all 0.18s; color: var(--text);
+        }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #EBF8FF; }
+        .opt-btn.correct { border-color: var(--success); background: #F0FFF4; color: var(--success); font-weight: 600; }
+        .opt-btn.incorrect { border-color: var(--error); background: #FFF5F5; color: var(--error); }
+        .opt-btn:disabled { cursor: default; }
+
+        /* ── FILL INPUT ── */
+        .fill-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+        .fill-input {
+            flex: 1; min-width: 200px; padding: 11px 16px;
+            border: 2px solid var(--border); border-radius: 10px; font-size: 0.97rem; outline: none;
+            transition: border-color 0.2s;
+        }
+        .fill-input:focus { border-color: var(--primary); }
+        .fill-input.correct { border-color: var(--success); background: #F0FFF4; }
+        .fill-input.incorrect { border-color: var(--error); background: #FFF5F5; }
+        .verb-hint { font-size: 0.8rem; color: var(--text-light); margin-top: 7px; }
+
+        .check-btn {
+            padding: 11px 22px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; cursor: pointer; font-size: 0.93rem;
+            font-weight: 600; transition: background 0.2s; white-space: nowrap;
+        }
+        .check-btn:hover { background: var(--primary-dark); }
+        .check-btn:disabled { background: #CBD5E0; cursor: default; }
+
+        /* ── SOURCE (transform/error) ── */
+        .source-box {
+            background: #F7FAFC; border-left: 4px solid var(--primary);
+            border-radius: 0 8px 8px 0; padding: 13px 16px;
+            margin-bottom: 14px; font-size: 0.93rem; line-height: 1.6;
+        }
+        .error-box {
+            background: #FFF5F5; border: 1px solid #FED7D7; border-radius: 8px;
+            padding: 13px 16px; margin-bottom: 14px; font-size: 1rem; line-height: 1.7;
+        }
+        .text-area {
+            width: 100%; padding: 11px 16px; border: 2px solid var(--border); border-radius: 10px;
+            font-size: 0.93rem; outline: none; transition: border-color 0.2s;
+            resize: vertical; min-height: 60px; font-family: inherit;
+        }
+        .text-area:focus { border-color: var(--primary); }
+
+        /* ── FEEDBACK ── */
+        .feedback { margin-top: 18px; border-radius: 12px; overflow: hidden; display: none; }
+        .feedback.show { display: block; }
+        .fb-header {
+            padding: 13px 18px; font-weight: 700; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .fb-correct  { background: #F0FFF4; color: #276749; border: 1px solid #9AE6B4; }
+        .fb-wrong    { background: #FFF5F5; color: #C53030; border: 1px solid #FEB2B2; }
+        .fb-hint     { background: #FFFAF0; color: #744210; border: 1px solid #F6AD55; }
+        .fb-body { padding: 15px 18px; background: white; border: 1px solid var(--border); border-top: none; }
+        .answer-box {
+            background: #FFFAF0; border: 1px solid #F6AD55; border-radius: 8px;
+            padding: 9px 13px; margin-bottom: 10px; font-size: 0.88rem;
+        }
+        .rule-box { font-size: 0.88rem; margin-bottom: 10px; }
+        .expl-box { font-size: 0.86rem; color: #4A5568; margin-bottom: 10px; }
+        .ex-box { background: #F7FAFC; border-radius: 8px; padding: 10px 12px; font-size: 0.84rem; }
+        .ex-box p { margin-bottom: 3px; font-style: italic; }
+        .ex-box p:last-child { margin-bottom: 0; }
+
+        /* ── NAV ── */
+        .nav-buttons { display: flex; justify-content: flex-end; margin-top: 16px; }
+        .next-btn {
+            padding: 12px 28px; background: var(--primary); color: white;
+            border: none; border-radius: 10px; cursor: pointer; font-size: 0.93rem;
+            font-weight: 600; transition: all 0.2s;
+        }
+        .next-btn:hover { background: var(--primary-dark); transform: translateX(2px); }
+        .next-btn:disabled { background: #CBD5E0; cursor: default; transform: none; }
+
+        /* ── LEVEL COMPLETE ── */
+        .level-complete {
+            background: white; border-radius: 16px; padding: 44px 36px;
+            text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: none;
+        }
+        .level-complete.show { display: block; animation: slideIn 0.4s ease; }
+        .complete-icon { font-size: 4rem; margin-bottom: 14px; }
+        .complete-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+        .complete-msg { color: var(--text-light); margin-bottom: 24px; font-size: 0.95rem; }
+        .complete-stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+        .cs-val { font-size: 2rem; font-weight: 700; color: var(--primary); display: block; }
+        .cs-lbl { font-size: 0.78rem; color: var(--text-light); }
+        .continue-btn {
+            padding: 14px 40px; background: var(--primary); color: white;
+            border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .continue-btn:hover { background: var(--primary-dark); }
+
+        @media (max-width: 600px) {
+            .q-card { padding: 18px 14px; }
+            .q-sentence { font-size: 0.97rem; }
+            .complete-stats { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>⚡ Perfect Tenses Master</h1>
+        <div class="header-sub">PTE Academic · Grammar Training</div>
+    </div>
+    <div class="header-stats">
+        <div class="stat-item">
+            <span class="stat-value" id="hXP">0</span>XP
+        </div>
+        <div class="stat-item">
+            <span class="stat-value streak-val">🔥 <span id="hStreak">0</span></span>Streak
+        </div>
+        <div class="stat-item">
+            <span class="stat-value" id="hAcc">—</span>Accuracy
+        </div>
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="level-nav" id="level-nav">
+        <button class="level-btn active" data-lv="1" onclick="goLevel(1)">Level 1 · Present Perfect</button>
+        <button class="level-btn" data-lv="2" onclick="goLevel(2)">Level 2 · Past Perfect</button>
+        <button class="level-btn" data-lv="3" onclick="goLevel(3)">Level 3 · Future Perfect</button>
+        <button class="level-btn" data-lv="4" onclick="goLevel(4)">Level 4 · Continuous</button>
+        <button class="level-btn" data-lv="5" onclick="goLevel(5)">Level 5 · Mixed Challenge</button>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-info">
+            <span class="level-title-text" id="lvTitle">Level 1 — Present Perfect Simple</span>
+            <span id="qCounter">Question 1 of 8</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+
+    <div class="grammar-ref">
+        <div class="grammar-ref-header" onclick="toggleGrammar()">
+            📚 Grammar Reference — tap to expand
+            <span id="gramArrow">▼</span>
+        </div>
+        <div class="grammar-body" id="gramBody"></div>
+    </div>
+
+    <div id="qArea"></div>
+
+    <div class="level-complete" id="lvComplete">
+        <div class="complete-icon" id="cpIcon">🏆</div>
+        <div class="complete-title" id="cpTitle">Level Complete!</div>
+        <div class="complete-msg" id="cpMsg"></div>
+        <div class="complete-stats">
+            <div><span class="cs-val" id="cpXP">0</span><span class="cs-lbl">XP Earned</span></div>
+            <div><span class="cs-val" id="cpAcc">0%</span><span class="cs-lbl">Accuracy</span></div>
+            <div><span class="cs-val" id="cpScore">0/0</span><span class="cs-lbl">Correct</span></div>
+        </div>
+        <button class="continue-btn" id="cpBtn">Continue →</button>
+    </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// QUESTIONS DATABASE
+// ═══════════════════════════════════════════════════════════
+const Q = {
+
+// ─── LEVEL 1: Present Perfect Simple ────────────────────────────────────────
+1: [
+  {
+    type:'mc', tense:'Present Perfect Simple', diff:'⭐ Easy',
+    instr:'Select the correct verb form.',
+    sent:'The research team ___ significant findings in their latest study.',
+    opts:['have published','has published','had published','will have published'],
+    cor:1,
+    rule:'<strong>HAS</strong> with singular subjects (he/she/it/team). <strong>HAVE</strong> with plural or I/you/we/they.',
+    expl:'"The research team" is treated as singular in academic English → <strong>HAS published</strong>.',
+    exs:['The scientist <em>has discovered</em> a new compound. (singular)','Scientists <em>have discovered</em> many compounds. (plural)']
+  },
+  {
+    type:'fill', tense:'Present Perfect Simple', diff:'⭐ Easy',
+    instr:'Fill in the blank with the correct form of the verb in parentheses.',
+    sent:'Global temperatures ___ (rise) by 1.2°C since pre-industrial times.',
+    ans:['have risen'],
+    hint:'RISE → rose → <strong>risen</strong> (irregular past participle)',
+    rule:'Present Perfect = HAVE/HAS + <strong>past participle</strong> (not simple past).',
+    expl:'"Temperatures" = plural → <strong>HAVE</strong>. Past participle of "rise" = "risen" (not "rose").',
+    exs:['"Temperatures <em>have risen</em> sharply." ✓','"Temperatures <em>have rose</em>." ✗ (wrong — "rose" is simple past, not past participle)']
+  },
+  {
+    type:'mc', tense:'Present Perfect Simple', diff:'⭐ Easy',
+    instr:'Select the correct form. Pay attention to the time expression.',
+    sent:'She ___ three academic papers on climate change this semester.',
+    opts:['wrote','has written','have written','had wrote'],
+    cor:1,
+    rule:'Use Present Perfect (not Simple Past) when the time period is <strong>not finished</strong>: "today", "this week", "this semester".',
+    expl:'"This semester" is still ongoing → Present Perfect. "She" = singular → <strong>HAS written</strong>.',
+    exs:['"She <em>has written</em> three papers <em>this semester</em>." ✓ (semester ongoing)','<em>"She <em>wrote</em> three papers <em>last semester</em>." ✓ (finished → Simple Past)']
+  },
+  {
+    type:'fill', tense:'Present Perfect Simple', diff:'⭐ Easy',
+    instr:'Fill in the blank.',
+    sent:'The government ___ (implement) several new education policies in recent years.',
+    ans:['has implemented'],
+    hint:'IMPLEMENT → implemented (regular verb)',
+    rule:'"In recent years", "recently", "lately" are <strong>Present Perfect signals</strong>.',
+    expl:'"The government" = singular → <strong>HAS</strong>. "In recent years" = unfinished reference → Present Perfect.',
+    exs:['"The government <em>has implemented</em> new policies recently." ✓','"Researchers <em>have implemented</em> new methods." ✓ (plural)']
+  },
+  {
+    type:'mc', tense:'Present Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Which sentence is grammatically correct and uses Present Perfect appropriately?',
+    sent:'Choose the best option:',
+    opts:[
+      'Researchers have found a cure last year.',
+      'Researchers have found evidence of improvement recently.',
+      'Researchers has found evidence of improvement recently.',
+      'Researchers have been found a cure last year.'
+    ],
+    cor:1,
+    rule:'NEVER use Present Perfect with specific finished times: <strong>yesterday, last week, in 2020, three days ago.</strong>',
+    expl:'"Recently" ✓ signals Present Perfect. "Last year" ✗ requires Simple Past. "Researchers" = plural → HAVE (not has).',
+    exs:['"They <em>have found</em> evidence <em>recently</em>." ✓ (no specific time)','"They <em>found</em> evidence <em>last year</em>." ✓ (specific finished time)']
+  },
+  {
+    type:'fill', tense:'Present Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Careful — "The number of" takes a singular verb!',
+    sent:'The number of people living in urban areas ___ (increase) dramatically over the past decade.',
+    ans:['has increased'],
+    hint:'INCREASE → increased (regular). Subject = "The number" (singular)',
+    rule:'"<strong>The number of</strong> + noun" → singular verb (HAS). "<strong>A number of</strong> + noun" → plural verb (HAVE).',
+    expl:'"The number of people" → subject = "the number" = singular → <strong>HAS increased</strong>.',
+    exs:['"<em>The number of</em> students <em>has</em> grown." ✓','"<em>A number of</em> students <em>have</em> passed." ✓']
+  },
+  {
+    type:'error', tense:'Present Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Find the subject-verb agreement error and type the corrected full sentence.',
+    err:'Scientists have recently discovered that the brain have developed new neural pathways in response to learning.',
+    fix:['scientists have recently discovered that the brain has developed new neural pathways in response to learning'],
+    highlight:'have developed → has developed (brain = singular)',
+    rule:'In complex sentences, check <strong>each subject-verb pair independently</strong>.',
+    expl:'First clause: "scientists have discovered" ✓ (plural). Second clause: "the brain" is singular → <strong>HAS developed</strong> ✓.',
+    exs:['"...that the brain <em>has developed</em>..." ✓','"...that neurons <em>have developed</em>..." ✓ (plural subject)']
+  },
+  {
+    type:'transform', tense:'Present Perfect Simple', diff:'⭐⭐⭐ Hard',
+    instr:'Combine these sentences using Present Perfect to show past action → present result.',
+    src:'Scientists conducted extensive research. The field of medicine now has better treatments.',
+    model:'Scientists have conducted extensive research, leading to better treatments in medicine.',
+    keys:['have conducted','have done','have carried out'],
+    rule:'Present Perfect connects <strong>past action → present result</strong>. This is essential for PTE writing tasks.',
+    expl:'The research (completed past) is connected to the present result (better treatments). Use Present Perfect to make this link explicit.',
+    exs:['"They <em>have studied</em> this for years, and now we understand it better." ✓','"Research <em>has shown</em> that diet affects health." ✓ (past research → present knowledge)']
+  }
+],
+
+// ─── LEVEL 2: Past Perfect Simple ───────────────────────────────────────────
+2: [
+  {
+    type:'mc', tense:'Past Perfect Simple', diff:'⭐ Easy',
+    instr:'Select the correct form. Which action happened first?',
+    sent:'By the time the report was published, the researchers ___ their data three times.',
+    opts:['have verified','verified','had verified','has verified'],
+    cor:2,
+    rule:'Past Perfect (HAD + pp) = the action that happened <strong>FIRST</strong> in a sequence of past events.',
+    expl:'Verifying happened FIRST → Past Perfect: <strong>had verified</strong>. Publishing happened SECOND → Simple Past.',
+    exs:['"By the time the results came out, they <em>had already analyzed</em> the data." ✓','"When she arrived, the lecture <em>had started</em>." ✓']
+  },
+  {
+    type:'fill', tense:'Past Perfect Simple', diff:'⭐ Easy',
+    instr:'Fill in the blank using Past Perfect.',
+    sent:'The professor realized that he ___ (forget) to include the key references in his paper.',
+    ans:['had forgotten'],
+    hint:'FORGET → forgot → <strong>forgotten</strong> (irregular)',
+    rule:'HAD + past participle — same for ALL subjects (I/you/he/she/we/they had).',
+    expl:'"Forgetting" happened BEFORE "realizing" → Past Perfect: <strong>had forgotten</strong>.',
+    exs:['"He realized he <em>had forgotten</em> his notes." ✓','"She discovered she <em>had made</em> an error." ✓']
+  },
+  {
+    type:'mc', tense:'Past Perfect Simple', diff:'⭐ Easy',
+    instr:'Select the correct form.',
+    sent:'The experiment failed because the team ___ the correct procedure.',
+    opts:['has not followed','had not followed','did not followed','have not followed'],
+    cor:1,
+    rule:'Negative Past Perfect = <strong>HAD NOT (hadn\'t) + past participle</strong>.',
+    expl:'The failure was in the past; not following the procedure happened even EARLIER → Past Perfect negative.',
+    exs:['"The test failed because they <em>hadn\'t calibrated</em> the equipment." ✓','"She failed because she <em>had not studied</em> enough." ✓']
+  },
+  {
+    type:'fill', tense:'Past Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Fill in the blank.',
+    sent:'After the committee ___ (review) all the applications, they announced their decision.',
+    ans:['had reviewed'],
+    hint:'REVIEW → reviewed (regular)',
+    rule:'After/before/by the time/when → use Past Perfect for the <strong>first action</strong>.',
+    expl:'Reviewing (first) → <strong>had reviewed</strong>. Announcing (second) → Simple Past.',
+    exs:['"<em>After</em> she <em>had finished</em> the research, she began writing." ✓','"<em>Before</em> they <em>had gathered</em> enough evidence, they couldn\'t publish." ✓']
+  },
+  {
+    type:'mc', tense:'Past Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Choose the grammatically correct sentence.',
+    sent:'Which sentence uses Past Perfect correctly?',
+    opts:[
+      'She had lived in three countries before she turned 25.',
+      'She has lived in three countries before she turned 25.',
+      'She lived in three countries before she had turned 25.',
+      'She had been lived in three countries before she turned 25.'
+    ],
+    cor:0,
+    rule:'The <strong>EARLIER</strong> action gets Past Perfect. The LATER past action uses Simple Past.',
+    expl:'Living (earlier, had lived) → Past Perfect. Turning 25 (later) → Simple Past. Option C incorrectly puts Past Perfect on the later action.',
+    exs:['"She <em>had graduated</em> before she found a job." ✓','"She found a job after she <em>had graduated</em>." ✓']
+  },
+  {
+    type:'transform', tense:'Past Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Combine these sentences, making clear which action happened first.',
+    src:'Step 1: The scientists collected the samples. Step 2: They began the analysis.',
+    model:'The scientists had collected the samples before they began the analysis.',
+    keys:['had collected','had gathered'],
+    rule:'Timeline: [Past Perfect — first action] → then → [Simple Past — second action].',
+    expl:'"Collecting" happened first → Past Perfect. "Beginning the analysis" → Simple Past.',
+    exs:['"They <em>had prepared</em> thoroughly before the experiment <em>started</em>." ✓','"By the time the meeting <em>began</em>, she <em>had already written</em> the proposal." ✓']
+  },
+  {
+    type:'fill', tense:'Past Perfect Simple', diff:'⭐⭐⭐ Hard',
+    instr:'Fill in the blank. This uses a negative form in an academic context.',
+    sent:'The study revealed that many participants ___ (not / receive) adequate healthcare prior to the program.',
+    ans:['had not received','hadn\'t received'],
+    hint:'Negative: HAD NOT + past participle',
+    rule:'Past Perfect is used in reported speech/findings to describe states <strong>before the main past verb</strong>.',
+    expl:'"The study revealed" = past. Participants not receiving healthcare = even earlier past → <strong>had not received</strong>.',
+    exs:['"The results showed that conditions <em>had not improved</em>." ✓','"Data indicated that funding <em>had not been</em> sufficient." ✓']
+  },
+  {
+    type:'error', tense:'Past Perfect Simple', diff:'⭐⭐⭐ Hard',
+    instr:'Correct the tense error.',
+    err:'When the new data emerged, researchers discovered that their initial hypothesis has proven to be incorrect.',
+    fix:['when the new data emerged, researchers discovered that their initial hypothesis had proven to be incorrect'],
+    highlight:'has proven → had proven (the proving happened before the discovery)',
+    rule:'In a past context, <strong>Present Perfect → Past Perfect</strong> (tense backshift).',
+    expl:'"Has proven" = Present Perfect — but the entire context is past. The hypothesis being incorrect was discovered in the past → <strong>had proven</strong>.',
+    exs:['"They found that the theory <em>had been</em> wrong all along." ✓','"She realized she <em>had overlooked</em> the key data." ✓']
+  }
+],
+
+// ─── LEVEL 3: Future Perfect Simple ─────────────────────────────────────────
+3: [
+  {
+    type:'mc', tense:'Future Perfect Simple', diff:'⭐ Easy',
+    instr:'Select the correct form.',
+    sent:'By 2050, scientists ___ more efficient solar panels.',
+    opts:['will develop','will have developed','have developed','had developed'],
+    cor:1,
+    rule:'Future Perfect = <strong>WILL HAVE + past participle</strong>. Signal: "by [future time]".',
+    expl:'"By 2050" = future deadline. The action will be COMPLETED before that point → <strong>will have developed</strong>.',
+    exs:['"<em>By</em> next year, they <em>will have completed</em> the study." ✓','"<em>By the time</em> she graduates, she <em>will have written</em> 20 papers." ✓']
+  },
+  {
+    type:'fill', tense:'Future Perfect Simple', diff:'⭐ Easy',
+    instr:'Fill in the blank with Future Perfect.',
+    sent:'By the end of this decade, renewable energy ___ (replace) most fossil fuel sources.',
+    ans:['will have replaced'],
+    hint:'REPLACE → replaced (regular)',
+    rule:'Signals for Future Perfect: <strong>by + [time]</strong>, by the time, before [future event].',
+    expl:'"By the end of this decade" = future deadline → Future Perfect: <strong>will have replaced</strong>.',
+    exs:['"By 2030, solar energy <em>will have replaced</em> coal in many regions." ✓','"Before he retires, he <em>will have worked</em> here for 20 years." ✓']
+  },
+  {
+    type:'mc', tense:'Future Perfect Simple', diff:'⭐ Easy',
+    instr:'Which sentence correctly uses Future Perfect?',
+    sent:'Choose the best option:',
+    opts:[
+      'She will finished the report by Friday.',
+      'She will have finish the report by Friday.',
+      'She will have finished the report by Friday.',
+      'She has finished the report by Friday.'
+    ],
+    cor:2,
+    rule:'Structure: <strong>WILL + HAVE + PAST PARTICIPLE</strong> (never "will have + base form").',
+    expl:'Option A: missing "have". Option B: "finish" should be "finished" (past participle). Option D: wrong tense (Present Perfect). C is correct.',
+    exs:['"By noon, I <em>will have submitted</em> my assignment." ✓','"They <em>will have published</em> the results by then." ✓']
+  },
+  {
+    type:'fill', tense:'Future Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Fill in the blank.',
+    sent:'Before the next international conference, the team ___ (publish) at least five peer-reviewed papers.',
+    ans:['will have published'],
+    hint:'PUBLISH → published (regular)',
+    rule:'"Before + future event" signals Future Perfect, just like "by + future time".',
+    expl:'The publishing will be completed BEFORE the conference (future event) → <strong>will have published</strong>.',
+    exs:['"<em>Before</em> he retires, he <em>will have taught</em> for 30 years." ✓','"<em>Before</em> the summit, nations <em>will have agreed</em> on a framework." ✓']
+  },
+  {
+    type:'mc', tense:'Future Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Select the best answer. Note the irregular verb.',
+    sent:'By the time the study is complete, the participants ___ multiple assessments over a two-year period.',
+    opts:['will undergo','undergo','will have undergone','have undergone'],
+    cor:2,
+    rule:'Irregular verbs still follow the pattern: WILL HAVE + <strong>past participle</strong>.',
+    expl:'"Undergo" is irregular: undergo → underwent → <strong>undergone</strong>. "By the time the study is complete" = future deadline.',
+    exs:['"By graduation, she <em>will have taken</em> 40 courses." ✓ (take → taken)','"By then, they <em>will have undergone</em> training." ✓']
+  },
+  {
+    type:'transform', tense:'Future Perfect Simple', diff:'⭐⭐ Medium',
+    instr:'Rewrite this sentence using Future Perfect with "By 2030".',
+    src:'Global deforestation reaches a critical point. (Prediction: this will happen by 2030.)',
+    model:'By 2030, global deforestation will have reached a critical point.',
+    keys:['will have reached','will have gotten to'],
+    rule:'Formula: <strong>By [future time], Subject + will have + past participle + ...</strong>',
+    expl:'A future prediction about something completed by a deadline = Future Perfect.',
+    exs:['"By 2050, the world population <em>will have reached</em> 10 billion." ✓','"By next month, the project <em>will have been</em> running for a year." ✓']
+  },
+  {
+    type:'error', tense:'Future Perfect Simple', diff:'⭐⭐⭐ Hard',
+    instr:'Correct the tense error.',
+    err:'By the time the policy is implemented, the committee will reviewed all available evidence.',
+    fix:['by the time the policy is implemented, the committee will have reviewed all available evidence'],
+    highlight:'will reviewed → will have reviewed',
+    rule:'Future Perfect = will + <strong>HAVE</strong> + past participle. "will + past participle" is NOT a valid tense.',
+    expl:'"Will reviewed" is impossible in English. Always: <strong>will HAVE + past participle</strong>.',
+    exs:['"The committee <em>will have reviewed</em> all evidence by then." ✓','"She <em>will have completed</em> the draft by Monday." ✓']
+  },
+  {
+    type:'fill', tense:'Future Perfect Simple', diff:'⭐⭐⭐ Hard',
+    instr:'Fill in the blank. Consider the time clause carefully.',
+    sent:'When the next census is conducted, the population ___ (grow) by an estimated 15 percent.',
+    ans:['will have grown'],
+    hint:'GROW → grew → <strong>grown</strong> (irregular)',
+    rule:'In time clauses (when/before/by the time), use <strong>present tense</strong> for future; use <strong>Future Perfect</strong> in the main clause.',
+    expl:'"When the census is conducted" = time clause (present tense for future). Growth will be complete by then → <strong>will have grown</strong>.',
+    exs:['"<em>When</em> you return, she <em>will have graduated</em>." ✓','"<em>By the time</em> he arrives, we <em>will have finished</em>." ✓']
+  }
+],
+
+// ─── LEVEL 4: Perfect Continuous Forms ──────────────────────────────────────
+4: [
+  {
+    type:'mc', tense:'Present Perfect Continuous', diff:'⭐ Easy',
+    instr:'Select the correct form.',
+    sent:'Researchers ___ the effects of climate change for over three decades.',
+    opts:['are studying','have been studying','have studied','had been studying'],
+    cor:1,
+    rule:'Present Perfect Continuous = <strong>HAVE/HAS + BEEN + verb-ing</strong>. Used for ongoing activities with duration.',
+    expl:'"For over three decades" = duration signal. The activity started in the past and continues NOW → <strong>have been studying</strong>.',
+    exs:['"Scientists <em>have been researching</em> this topic for years." ✓','"She <em>has been writing</em> her thesis since January." ✓']
+  },
+  {
+    type:'fill', tense:'Present Perfect Continuous', diff:'⭐ Easy',
+    instr:'Fill in the blank using Present Perfect Continuous.',
+    sent:'The government ___ (negotiate) trade agreements with several countries since 2020.',
+    ans:['has been negotiating'],
+    hint:'NEGOTIATE → negotiating. Singular subject → HAS',
+    rule:'Signals: <strong>"for + duration"</strong> and <strong>"since + point in time"</strong> → Present Perfect Continuous.',
+    expl:'"The government" = singular → HAS. "Since 2020" = ongoing from a past point → <strong>has been negotiating</strong>.',
+    exs:['"She <em>has been working</em> here since January." ✓','"They <em>have been developing</em> the app for six months." ✓']
+  },
+  {
+    type:'mc', tense:'Pres. Perf. Simple vs. Continuous', diff:'⭐⭐ Medium',
+    instr:'Both blanks require Present Perfect — choose the right form (Simple or Continuous) for each.',
+    sent:'The lab ___ three groundbreaking papers this year, and the team ___ tirelessly to produce more.',
+    opts:[
+      'has published / have been working',
+      'has been publishing / have been working',
+      'published / worked',
+      'has published / has worked'
+    ],
+    cor:0,
+    rule:'Use <strong>Present Perfect Simple</strong> for completed, countable results. Use <strong>Continuous</strong> for ongoing processes emphasizing duration.',
+    expl:'"Three papers" = countable completed result → <strong>has published</strong>. "Working tirelessly" = ongoing process → <strong>have been working</strong>.',
+    exs:['"I <em>have written</em> five emails today." (complete, countable)','"I <em>have been writing</em> emails all day." (ongoing, duration)']
+  },
+  {
+    type:'fill', tense:'Past Perfect Continuous', diff:'⭐⭐ Medium',
+    instr:'Fill in the blank using Past Perfect Continuous.',
+    sent:'By the time the funding was cut, the team ___ (work) on the project for five years.',
+    ans:['had been working'],
+    hint:'Past Perfect Continuous = HAD BEEN + verb-ing',
+    rule:'Past Perfect Continuous = <strong>HAD + BEEN + verb-ing</strong>. Shows an ongoing activity up to a past point.',
+    expl:'"Funding being cut" = past event. Working was ongoing BEFORE and UP TO that event → <strong>had been working</strong>.',
+    exs:['"She <em>had been studying</em> for hours before she took a break." ✓','"He <em>had been living</em> abroad for years when he returned." ✓']
+  },
+  {
+    type:'mc', tense:'Past Perfect Continuous', diff:'⭐⭐ Medium',
+    instr:'Select the correct form.',
+    sent:'The data showed that pollution levels ___ for decades before the clean air act was passed.',
+    opts:['were increasing','had been increasing','have been increasing','had increased'],
+    cor:1,
+    rule:'Past Perfect Continuous emphasizes the <strong>DURATION</strong> of an activity before a past event.',
+    expl:'"Were increasing" = past continuous (no link to another event). "Had been increasing" = ongoing duration BEFORE the past event (the clean air act). ✓',
+    exs:['"Emissions <em>had been rising</em> for years before action was taken." ✓','"The economy <em>had been declining</em> for months before the crisis hit." ✓']
+  },
+  {
+    type:'fill', tense:'Future Perfect Continuous', diff:'⭐⭐⭐ Hard',
+    instr:'Fill in the blank using Future Perfect Continuous.',
+    sent:'By 2035, the research institute ___ (operate) for exactly one hundred years.',
+    ans:['will have been operating'],
+    hint:'Future Perfect Continuous = WILL HAVE BEEN + verb-ing',
+    rule:'Future Perfect Continuous = <strong>WILL + HAVE + BEEN + verb-ing</strong>. Emphasizes DURATION up to a future point.',
+    expl:'"By 2035" = future deadline. The operation will have been continuously going for 100 years by then → <strong>will have been operating</strong>.',
+    exs:['"By retirement, she <em>will have been teaching</em> for 35 years." ✓','"By June, they <em>will have been collaborating</em> for a decade." ✓']
+  },
+  {
+    type:'mc', tense:'All Perfect Continuous', diff:'⭐⭐⭐ Hard',
+    instr:'Choose the correct pair of tenses.',
+    sent:'Scientists ___ the compound for two years when the breakthrough occurred. They estimate that by next year they ___ for a total of four years.',
+    opts:[
+      'had been studying / will have been studying',
+      'have been studying / will have been studying',
+      'were studying / will have studied',
+      'had been studying / will have studied'
+    ],
+    cor:0,
+    rule:'<strong>Past Perf. Cont.</strong> (ongoing before past event) + <strong>Future Perf. Cont.</strong> (duration up to future point).',
+    expl:'First blank: ongoing study before past event (breakthrough) → <strong>had been studying</strong>. Second blank: duration until future point → <strong>will have been studying</strong>.',
+    exs:['"They <em>had been working</em> for hours when it happened." (past)','"By June, they <em>will have been working</em> for a year." (future)']
+  },
+  {
+    type:'error', tense:'Present Perfect Continuous', diff:'⭐⭐⭐ Hard',
+    instr:'Find TWO errors in this sentence and write the corrected version.',
+    err:'The university have been offered scholarships to international students since its founding in 1890.',
+    fix:['the university has been offering scholarships to international students since its founding in 1890'],
+    highlight:'Error 1: have → has (university = singular) | Error 2: offered → offering (active voice needed)',
+    rule:'Active: HAVE/HAS + BEEN + verb-<strong>ING</strong>. Passive: HAVE/HAS + BEEN + past participle.',
+    expl:'1) "University" = singular → <strong>HAS</strong>. 2) "Offered" = passive form; active meaning needed here → <strong>offering</strong>.',
+    exs:['"The school <em>has been offering</em> the course since 2000." ✓ (active)','"The course <em>has been offered</em> since 2000." ✓ (passive — subject receives action)']
+  }
+],
+
+// ─── LEVEL 5: Mixed Challenge ────────────────────────────────────────────────
+5: [
+  {
+    type:'mc', tense:'Mixed — Pres. Perf. Simple + Continuous', diff:'⭐⭐ Medium',
+    instr:'Select the most appropriate form for this academic sentence.',
+    sent:'The study, which ___ for three years, ___ compelling evidence that diet affects cognitive function.',
+    opts:[
+      'has been running / has produced',
+      'had been running / has produced',
+      'has been running / produced',
+      'was running / has produced'
+    ],
+    cor:0,
+    rule:'<strong>Pres. Perf. Continuous</strong> (ongoing process) + <strong>Pres. Perf. Simple</strong> (completed result) often appear together.',
+    expl:'"The study" started 3 years ago and is still running → <strong>has been running</strong>. It has produced a result (evidence) → <strong>has produced</strong>.',
+    exs:['"The experiment <em>has been running</em> since June and <em>has yielded</em> promising results." ✓']
+  },
+  {
+    type:'fill', tense:'Mixed — Context Clues', diff:'⭐⭐ Medium',
+    instr:'Use the correct Past Perfect form. Both simple and continuous are acceptable here.',
+    sent:'Before the Industrial Revolution began in the 1760s, humanity ___ (rely) primarily on manual labor for centuries.',
+    ans:['had relied','had been relying'],
+    hint:'RELY → relied. Accept: had relied / had been relying',
+    rule:'"For centuries" + "before a past point" → Past Perfect. Continuous form emphasizes the duration more.',
+    expl:'Both are correct. <strong>Had relied</strong> = simple fact. <strong>Had been relying</strong> = emphasis on long ongoing duration. The Industrial Revolution is the past reference point.',
+    exs:['"People <em>had relied</em> on horses for transport." (simple)','"People <em>had been relying</em> on horses for centuries." (duration emphasis)']
+  },
+  {
+    type:'mc', tense:'Mixed — Academic Writing Pattern', diff:'⭐⭐⭐ Hard',
+    instr:'In academic writing, which option correctly completes this sentence?',
+    sent:'As this paper ___, previous studies ___ the relationship between poverty and educational outcomes.',
+    opts:[
+      'argues / have consistently demonstrated',
+      'has argued / had consistently demonstrated',
+      'argued / have consistently demonstrated',
+      'argues / consistently demonstrated'
+    ],
+    cor:0,
+    rule:'Academic writing: <strong>Simple Present</strong> for the paper\'s own claims. <strong>Present Perfect</strong> for accumulated past research.',
+    expl:'"This paper argues" = Simple Present (general truth, ongoing argument). "Have demonstrated" = Present Perfect (accumulated body of research over time).',
+    exs:['"This essay <em>argues</em> that... Previous studies <em>have shown</em> that..." ✓','"The data <em>suggests</em> that researchers <em>have long recognized</em> this pattern." ✓']
+  },
+  {
+    type:'fill', tense:'Mixed — Two Blanks', diff:'⭐⭐⭐ Hard',
+    instr:'Fill in BOTH blanks with the correct Present Perfect forms.',
+    sent:'The data indicates that living standards ___ (improve) significantly since 1950, though progress ___ (not / be) uniform across all regions.',
+    ans:['have improved / has not been'],
+    hint:'Blank 1: "living standards" (plural). Blank 2: "progress" (singular, uncountable)',
+    rule:'Always identify the <strong>subject for each verb separately</strong> to choose HAVE or HAS.',
+    expl:'"Living standards" = plural → <strong>HAVE improved</strong>. "Progress" = singular/uncountable → <strong>HAS NOT BEEN</strong>.',
+    exs:['"Standards <em>have risen</em>, but equality <em>has not improved</em>." ✓','"Outcomes <em>have varied</em>, but commitment <em>has not wavered</em>." ✓']
+  },
+  {
+    type:'mc', tense:'Mixed — PTE Writing Quality', diff:'⭐⭐⭐ Hard',
+    instr:'Select the paragraph that uses perfect tenses most accurately for PTE writing.',
+    sent:'Choose the best written paragraph:',
+    opts:[
+      'Urbanisation has transformed societies worldwide. Millions of people have migrated to cities since the mid-20th century, and urban populations have grown exponentially.',
+      'Urbanisation transformed societies worldwide. Millions of people migrated to cities since the mid-20th century, and urban populations grew exponentially.',
+      'Urbanisation has transformed societies worldwide. Millions of people migrated to cities since the mid-20th century, and urban populations have grown exponentially.',
+      'Urbanisation had transformed societies worldwide. Millions of people have migrated to cities since the mid-20th century, and urban populations have grown exponentially.'
+    ],
+    cor:0,
+    rule:'PTE Tip: Use <strong>Present Perfect consistently</strong> when describing trends that started in the past and continue to the present.',
+    expl:'Option A: all three verbs correctly use Present Perfect for ongoing past-to-present trends. "Since the mid-20th century" requires Present Perfect (not Simple Past).',
+    exs:['"Trade <em>has increased</em>, barriers <em>have fallen</em>, and technology <em>has connected</em> global markets." ✓']
+  },
+  {
+    type:'error', tense:'Mixed — Two Errors', diff:'⭐⭐⭐⭐ Expert',
+    instr:'This paragraph has TWO tense errors. Find both and write the corrected version.',
+    err:'Research conducted over the past 50 years have shown that exercise improves mental health. Studies had demonstrated that even moderate physical activity reduces symptoms of depression.',
+    fix:['research conducted over the past 50 years has shown that exercise improves mental health. studies have demonstrated that even moderate physical activity reduces symptoms of depression'],
+    highlight:'Error 1: have shown → HAS shown (Research = singular). Error 2: had demonstrated → HAVE demonstrated (no earlier past reference point)',
+    rule:'"Research" = singular → HAS. "Over the past X years" = Present Perfect signal (not Past Perfect).',
+    expl:'Error 1: "Research" = uncountable singular → <strong>HAS shown</strong>. Error 2: No earlier past reference point exists → Past Perfect (had) is wrong. Use <strong>have demonstrated</strong>.',
+    exs:['"<em>Research</em> in this field <em>has shown</em>..." ✓','"<em>Studies</em> over the past decade <em>have found</em>..." ✓']
+  },
+  {
+    type:'transform', tense:'Mixed — Full Paragraph Upgrade', diff:'⭐⭐⭐⭐ Expert',
+    instr:'Rewrite this student paragraph using appropriate perfect tenses. Change only the verb forms.',
+    src:'Scientists study artificial intelligence for decades. They develop many applications. By 2030, AI changes almost every industry.',
+    model:'Scientists have been studying artificial intelligence for decades. They have developed many applications. By 2030, AI will have changed almost every industry.',
+    keys:['have been studying','have developed','will have changed'],
+    rule:'PTE Strategy: Show all 3 perfect tense types in one paragraph to demonstrate grammatical range.',
+    expl:'1) "For decades" → Present Perf. Continuous: <em>have been studying</em>. 2) Completed result → Present Perf. Simple: <em>have developed</em>. 3) "By 2030" → Future Perfect: <em>will have changed</em>.',
+    exs:['"Humans <em>have been exploring</em> space for decades. They <em>have made</em> great discoveries. By 2050, they <em>will have landed</em> on Mars." ✓']
+  },
+  {
+    type:'mc', tense:'Mixed — Tense Identification', diff:'⭐⭐⭐⭐ Expert',
+    instr:'A PTE examiner reads this response. Which version demonstrates the best grammatical range?',
+    sent:'Choose the best academic response:',
+    opts:[
+      'Technology has revolutionised communication. Social media platforms have been growing rapidly since 2004, and by 2030 they will have become even more integrated into daily life.',
+      'Technology revolutionised communication. Social media platforms grew rapidly since 2004, and by 2030 they will become even more integrated into daily life.',
+      'Technology has revolutionised communication. Social media platforms have been growing rapidly since 2004, and by 2030 they will become even more integrated into daily life.',
+      'Technology had revolutionised communication. Social media platforms had been growing rapidly since 2004, and by 2030 they had become even more integrated into daily life.'
+    ],
+    cor:0,
+    rule:'Demonstrate <strong>grammatical range</strong> in PTE: use Pres. Perf. Simple + Pres. Perf. Continuous + Future Perfect in one paragraph.',
+    expl:'Option A uses 3 perfect tenses correctly: <em>has revolutionised</em> (simple), <em>have been growing</em> (continuous), <em>will have become</em> (future). This shows maximum range.',
+    exs:['"The internet <em>has changed</em> commerce. E-commerce <em>has been growing</em> for two decades. By 2040, it <em>will have surpassed</em> traditional retail." ✓']
+  }
+]
+
+}; // end Q
+
+// ═══════════════════════════════════════════════════════════
+// GRAMMAR REFERENCE DATA
+// ═══════════════════════════════════════════════════════════
+const GRAM = {
+1: { title: 'Present Perfect Simple', cards: [{
+  name: 'Present Perfect Simple', formula: 'HAVE / HAS + past participle', color: '#27AE60',
+  uses: ['Actions with present relevance', '"For/since" + ongoing states', 'Experiences (ever/never)', 'Unfinished time periods (today, this year, this semester)'],
+  exs: ['She <em>has written</em> the report. (just completed)', 'They <em>have lived</em> here for ten years.', 'I <em>have never visited</em> that country.', 'He <em>has published</em> three papers <em>this semester</em>.']
+}]},
+2: { title: 'Past Perfect Simple', cards: [{
+  name: 'Past Perfect Simple', formula: 'HAD + past participle (all subjects)', color: '#2980B9',
+  uses: ['First action in a sequence of two past actions', 'Reported speech (backshift from present → past perfect)', '"By the time / before / after / when" structures'],
+  exs: ['By the time she arrived, he <em>had left</em>.', 'She said she <em>had finished</em> the work.', 'They <em>had never seen</em> such results before.']
+}]},
+3: { title: 'Future Perfect Simple', cards: [{
+  name: 'Future Perfect Simple', formula: 'WILL HAVE + past participle', color: '#8E44AD',
+  uses: ['Action completed BEFORE a future point', '"By [future time]" structures', '"Before [future event]" structures'],
+  exs: ['By 2030, they <em>will have solved</em> the problem.', 'She <em>will have graduated</em> by then.', 'Before you arrive, I <em>will have prepared</em> everything.']
+}]},
+4: { title: 'Perfect Continuous Forms', cards: [
+  { name: 'Present Perfect Continuous', formula: 'HAVE/HAS + BEEN + verb-ing', color: '#E67E22',
+    uses: ['Ongoing activities from past to now (for/since)', 'Emphasis on PROCESS and duration, not result'],
+    exs: ['She <em>has been studying</em> for six hours.', 'They <em>have been building</em> the bridge since March.'] },
+  { name: 'Past Perfect Continuous', formula: 'HAD + BEEN + verb-ing', color: '#D35400',
+    uses: ['Ongoing activity up to a past point', 'Explaining cause of a past situation'],
+    exs: ['She <em>had been working</em> for 12 hours before she collapsed.', 'The ground was wet because it <em>had been raining</em>.'] },
+  { name: 'Future Perfect Continuous', formula: 'WILL + HAVE + BEEN + verb-ing', color: '#C0392B',
+    uses: ['Duration of activity up to a future point', 'Emphasis on HOW LONG something will have continued'],
+    exs: ['By June, she <em>will have been teaching</em> for 20 years.', 'When he retires, he <em>will have been working</em> there for 40 years.'] }
+]},
+5: { title: 'All 6 Perfect Tenses — Summary', cards: [{
+  name: 'Quick Reference Chart', formula: 'All 6 Perfect Forms', color: '#E74C3C',
+  uses: [
+    'Present Perfect Simple → have/has + pp',
+    'Past Perfect Simple → had + pp',
+    'Future Perfect Simple → will have + pp',
+    'Present Perfect Continuous → have/has been + -ing',
+    'Past Perfect Continuous → had been + -ing',
+    'Future Perfect Continuous → will have been + -ing'
+  ],
+  exs: [
+    'She <em>has written</em> the paper. (Pres. Perf. Simple)',
+    'She <em>had written</em> it. (Past Perf. Simple)',
+    'She <em>will have written</em> it. (Fut. Perf. Simple)',
+    'She <em>has been writing</em>. (Pres. Perf. Cont.)',
+    'She <em>had been writing</em>. (Past Perf. Cont.)',
+    'She <em>will have been writing</em>. (Fut. Perf. Cont.)'
+  ]
+}]}
+};
+
+const LV_TITLES = {
+  1: 'Level 1 — Present Perfect Simple',
+  2: 'Level 2 — Past Perfect Simple',
+  3: 'Level 3 — Future Perfect Simple',
+  4: 'Level 4 — Perfect Continuous Forms',
+  5: 'Level 5 — Mixed Challenge'
+};
+
+const LV_MSGS = {
+  1: "Present Perfect Simple mastered! Let's go deeper into the past.",
+  2: "Past Perfect conquered! Now we look to the future.",
+  3: "Future Perfect unlocked! Time for the continuous forms.",
+  4: "Perfect Continuous forms mastered! Final challenge awaits.",
+  5: "🎓 You've completed ALL Perfect Tenses! Excellent PTE preparation!"
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let S = {
+  lv: 1, idx: 0, answered: false, wrongTries: 0,
+  xp: 0, streak: 0,
+  lvStats: { correct: 0, total: 0, xp: 0 },
+  global: { correct: 0, total: 0 }
+};
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function init() { renderGram(S.lv); renderQ(); updateProgress(); }
+
+// ═══════════════════════════════════════════════════════════
+// LEVEL NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function goLevel(lv) {
+  S.lv = lv; S.idx = 0; S.answered = false; S.wrongTries = 0;
+  S.lvStats = { correct: 0, total: 0, xp: 0 };
+  document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.level-btn[data-lv="${lv}"]`).classList.add('active');
+  document.getElementById('lvComplete').classList.remove('show');
+  document.getElementById('qArea').style.display = 'block';
+  renderGram(lv); renderQ(); updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// GRAMMAR REFERENCE
+// ═══════════════════════════════════════════════════════════
+function toggleGrammar() {
+  const b = document.getElementById('gramBody');
+  b.classList.toggle('open');
+  document.getElementById('gramArrow').textContent = b.classList.contains('open') ? '▲' : '▼';
+}
+
+function renderGram(lv) {
+  const ref = GRAM[lv];
+  let h = '';
+  ref.cards.forEach(c => {
+    h += `<div class="tense-card" style="border-left-color:${c.color}">
+      <h4>${c.name}</h4>
+      <div class="formula-tag">${c.formula}</div>
+      <ul class="tense-uses">${c.uses.map(u => `<li>${u}</li>`).join('')}</ul>
+      ${c.exs.map(e => `<div class="tense-ex">• ${e}</div>`).join('')}
+    </div>`;
+  });
+  document.getElementById('gramBody').innerHTML = h;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER QUESTION
+// ═══════════════════════════════════════════════════════════
+function renderQ() {
+  const qs = Q[S.lv];
+  if (S.idx >= qs.length) { showLvComplete(); return; }
+  const q = qs[S.idx];
+  S.answered = false; S.wrongTries = 0;
+  const area = document.getElementById('qArea');
+  const typeLabels = { mc: 'Multiple Choice', fill: 'Fill in Blank', transform: 'Sentence Transform', error: 'Error Correction' };
+  let body = '';
+  if (q.type === 'mc')        body = buildMC(q);
+  else if (q.type === 'fill') body = buildFill(q);
+  else if (q.type === 'transform') body = buildTransform(q);
+  else if (q.type === 'error')     body = buildError(q);
+
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="badge b-tense">${q.tense}</span>
+        <span class="badge b-type">${typeLabels[q.type]}</span>
+        <span class="badge b-diff">${q.diff}</span>
+      </div>
+      <div class="q-instruction">${q.instr}</div>
+      ${body}
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>Next Question →</button>
+    </div>`;
+  if (q.type === 'fill') setTimeout(() => document.getElementById('fillIn')?.focus(), 80);
+  if (q.type === 'transform' || q.type === 'error') setTimeout(() => document.getElementById('textIn')?.focus(), 80);
+  updateProgress();
+}
+
+function buildMC(q) {
+  return `<div class="q-sentence">${q.sent}</div>
+    <div class="options-grid">${q.opts.map((o, i) =>
+      `<button class="opt-btn" onclick="checkMC(${i})">${o}</button>`).join('')}</div>`;
+}
+
+function buildFill(q) {
+  const s = q.sent.replace('___', '<span class="blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+  return `<div class="q-sentence">${s}</div>
+    <div class="fill-row">
+      <input class="fill-input" id="fillIn" type="text" placeholder="Type your answer..." onkeypress="if(event.key==='Enter') checkFill()">
+      <button class="check-btn" id="checkFillBtn" onclick="checkFill()">Check ✓</button>
+    </div>
+    ${q.hint ? `<div class="verb-hint">💡 ${q.hint}</div>` : ''}`;
+}
+
+function buildTransform(q) {
+  return `<div class="source-box">${q.src}</div>
+    <div class="q-instruction">Write your combined/rewritten sentence:</div>
+    <textarea class="text-area" id="textIn" rows="3" placeholder="Type your answer here..."></textarea>
+    <button class="check-btn" id="checkTxBtn" onclick="checkTransform()" style="margin-top:10px;">Check ✓</button>`;
+}
+
+function buildError(q) {
+  return `<div class="error-box">${q.err}</div>
+    <div class="q-instruction">Type the corrected sentence:</div>
+    <textarea class="text-area" id="textIn" rows="2" placeholder="Write the corrected sentence..."></textarea>
+    <button class="check-btn" id="checkTxBtn" onclick="checkError()" style="margin-top:10px;">Check ✓</button>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHECK ANSWERS
+// ═══════════════════════════════════════════════════════════
+function norm(s) {
+  return s.toLowerCase().replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkMC(i) {
+  if (S.answered) return;
+  const q = Q[S.lv][S.idx];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  const ok = i === q.cor;
+  btns[q.cor].classList.add('correct');
+  if (!ok) btns[i].classList.add('incorrect');
+  finish(ok, q);
+}
+
+function checkFill() {
+  if (S.answered) return;
+  const q = Q[S.lv][S.idx];
+  const inp = document.getElementById('fillIn');
+  const val = inp.value.trim();
+  if (!val) return;
+  // Handle two-blank answers (separated by /)
+  let ok = false;
+  if (q.ans[0].includes('/')) {
+    // two blanks — check if user wrote both key parts
+    const parts = q.ans[0].split('/').map(p => norm(p.trim()));
+    ok = parts.every(p => norm(val).includes(p));
+  } else {
+    ok = q.ans.some(a => norm(val) === norm(a));
+  }
+  if (!ok && S.wrongTries === 0) {
+    S.wrongTries++;
+    inp.classList.add('incorrect');
+    setTimeout(() => inp.classList.remove('incorrect'), 600);
+    showHint(q);
+    return;
+  }
+  inp.disabled = true;
+  document.getElementById('checkFillBtn').disabled = true;
+  inp.classList.add(ok ? 'correct' : 'incorrect');
+  finish(ok, q);
+}
+
+function checkTransform() {
+  if (S.answered) return;
+  const q = Q[S.lv][S.idx];
+  const val = document.getElementById('textIn').value.trim();
+  if (!val) return;
+  const ok = q.keys.some(k => norm(val).includes(norm(k)));
+  if (!ok && S.wrongTries === 0) {
+    S.wrongTries++;
+    showHint(q);
+    return;
+  }
+  document.getElementById('textIn').disabled = true;
+  document.getElementById('checkTxBtn').disabled = true;
+  finish(ok, q);
+}
+
+function checkError() {
+  if (S.answered) return;
+  const q = Q[S.lv][S.idx];
+  const val = document.getElementById('textIn').value.trim();
+  if (!val) return;
+  const firstWords = q.fix[0].split(' ').slice(0, 5).join(' ');
+  const ok = norm(val).includes(norm(firstWords));
+  if (!ok && S.wrongTries === 0) {
+    S.wrongTries++;
+    showHint(q);
+    return;
+  }
+  document.getElementById('textIn').disabled = true;
+  document.getElementById('checkTxBtn').disabled = true;
+  finish(ok, q);
+}
+
+// ═══════════════════════════════════════════════════════════
+// FINISH / SCORING
+// ═══════════════════════════════════════════════════════════
+function finish(ok, q) {
+  S.answered = true;
+  const xpEarned = ok ? (S.wrongTries === 0 ? 10 : 5) : 2;
+  if (ok) { S.streak++; S.lvStats.correct++; S.global.correct++; }
+  else { S.streak = 0; }
+  S.xp += xpEarned; S.lvStats.xp += xpEarned;
+  S.lvStats.total++; S.global.total++;
+  updateHeader();
+  showFeedback(ok, q, false);
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function updateHeader() {
+  document.getElementById('hXP').textContent = S.xp;
+  document.getElementById('hStreak').textContent = S.streak;
+  if (S.global.total > 0) {
+    document.getElementById('hAcc').textContent = Math.round(S.global.correct / S.global.total * 100) + '%';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// FEEDBACK
+// ═══════════════════════════════════════════════════════════
+function showHint(q) {
+  const fb = document.getElementById('feedback');
+  fb.innerHTML = `
+    <div class="fb-header fb-hint">💡 Not quite — check the hint and try again!</div>
+    <div class="fb-body">
+      ${q.highlight ? `<div class="answer-box">🔍 <strong>Clue:</strong> ${q.highlight}</div>` : ''}
+      <div class="rule-box">📖 <strong>Rule:</strong> ${q.rule}</div>
+    </div>`;
+  fb.classList.add('show');
+}
+
+function showFeedback(ok, q, _) {
+  const fb = document.getElementById('feedback');
+  let correctAns = '';
+  if (!ok) {
+    const ans = q.ans ? q.ans[0] : q.opts ? q.opts[q.cor] : q.model || q.fix?.[0] || '';
+    correctAns = `<div class="answer-box">✏️ <strong>Correct answer:</strong> ${ans}</div>`;
+  }
+  const xp = ok ? (S.wrongTries === 0 ? 10 : 5) : 2;
+  const streakMsg = ok && S.streak > 2 ? ` 🔥 ${S.streak}-streak bonus!` : '';
+
+  fb.innerHTML = `
+    <div class="fb-header ${ok ? 'fb-correct' : 'fb-wrong'}">
+      ${ok ? `✅ Correct! +${xp} XP${streakMsg}` : '❌ Incorrect — review the rule below'}
+    </div>
+    <div class="fb-body">
+      ${correctAns}
+      ${q.highlight && !ok ? `<div class="answer-box">🔍 <strong>Error identified:</strong> ${q.highlight}</div>` : ''}
+      <div class="rule-box">📖 <strong>Rule:</strong> ${q.rule}</div>
+      <div class="expl-box">💡 <strong>Explanation:</strong> ${q.expl}</div>
+      <div class="ex-box"><strong>Examples:</strong>${q.exs.map(e => `<p>• ${e}</p>`).join('')}</div>
+      ${q.type === 'transform' || q.type === 'error' ? `<div class="answer-box" style="margin-top:10px;">📝 <strong>Model answer:</strong> ${q.model || q.fix?.[0] || ''}</div>` : ''}
+    </div>`;
+  fb.classList.add('show');
+  fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function nextQ() {
+  S.idx++;
+  renderQ();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const total = Q[S.lv].length;
+  const cur = Math.min(S.idx + 1, total);
+  document.getElementById('lvTitle').textContent = LV_TITLES[S.lv];
+  document.getElementById('qCounter').textContent = `Question ${cur} of ${total}`;
+  document.getElementById('progFill').style.width = (S.idx / total * 100) + '%';
+}
+
+// ═══════════════════════════════════════════════════════════
+// LEVEL COMPLETE
+// ═══════════════════════════════════════════════════════════
+function showLvComplete() {
+  document.getElementById('qArea').style.display = 'none';
+  const acc = S.lvStats.total > 0 ? Math.round(S.lvStats.correct / S.lvStats.total * 100) : 0;
+  document.getElementById('cpIcon').textContent = S.lv === 5 ? '🎓' : '🏆';
+  document.getElementById('cpTitle').textContent = S.lv === 5 ? 'All Levels Complete!' : `Level ${S.lv} Complete!`;
+  document.getElementById('cpMsg').textContent = LV_MSGS[S.lv];
+  document.getElementById('cpXP').textContent = '+' + S.lvStats.xp;
+  document.getElementById('cpAcc').textContent = acc + '%';
+  document.getElementById('cpScore').textContent = `${S.lvStats.correct}/${S.lvStats.total}`;
+  const btn = document.getElementById('cpBtn');
+  if (S.lv >= 5) {
+    btn.textContent = 'Restart from Level 1 ↺';
+    btn.onclick = () => goLevel(1);
+  } else {
+    btn.textContent = `Continue to Level ${S.lv + 1} →`;
+    btn.onclick = () => goLevel(S.lv + 1);
+  }
+  document.getElementById('lvComplete').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+init();
+</script>
+</body>
+</html>

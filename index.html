@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTE Academic — Study Tools</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0F172A;
+            --card: #1E293B;
+            --card-hover: #263348;
+            --border: #334155;
+            --text: #F1F5F9;
+            --text-muted: #94A3B8;
+            --accent: #3B82F6;
+            --accent2: #8B5CF6;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, #1E3A5F 0%, #1a1a2e 100%);
+            padding: 48px 40px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .header-badge {
+            display: inline-block;
+            background: rgba(59,130,246,0.15);
+            border: 1px solid rgba(59,130,246,0.4);
+            color: #93C5FD;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #F1F5F9, #93C5FD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ── MAIN ── */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── CARDS GRID ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 18px;
+            margin-bottom: 48px;
+        }
+
+        .tool-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.22s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--card-accent, var(--accent));
+            opacity: 0;
+            transition: opacity 0.22s;
+        }
+        .tool-card:hover {
+            background: var(--card-hover);
+            border-color: var(--card-accent, var(--accent));
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+        }
+        .tool-card:hover::before { opacity: 1; }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .card-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+        .card-tags {
+            display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
+        }
+        .tag {
+            padding: 3px 9px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.07);
+            color: var(--text-muted);
+        }
+        .tag-hot {
+            background: rgba(239,68,68,0.15);
+            color: #FCA5A5;
+        }
+        .tag-new {
+            background: rgba(34,197,94,0.15);
+            color: #86EFAC;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+        .card-desc {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .card-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 14px;
+        }
+        .card-meta span::before { margin-right: 4px; }
+        .open-arrow {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .tool-card:hover .open-arrow {
+            background: var(--card-accent, var(--accent));
+            color: white;
+        }
+
+        /* ── COMING SOON ── */
+        .coming-soon {
+            background: var(--card);
+            border: 1px dashed var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            opacity: 0.5;
+            cursor: default;
+        }
+        .coming-soon .card-title { color: var(--text-muted); }
+        .cs-badge {
+            padding: 3px 9px;
+            border-radius: 8px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center;
+            padding: 32px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        footer a { color: #93C5FD; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            header { padding: 36px 20px 30px; }
+            main { padding: 32px 16px 60px; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-badge">PTE Academic</div>
+    <h1>Study Tools</h1>
+    <p>Interactive tools to practice English for the PTE Academic exam. Open source, no login required.</p>
+</header>
+
+<main>
+
+    <div class="section-label">Available Tools</div>
+
+    <div class="grid">
+
+        <!-- Tool 1: Pronunciacion Master -->
+        <a class="tool-card" href="pronunciacion_master.html" style="--card-accent: #3B82F6;">
+            <div class="card-top">
+                <div class="card-icon" style="background: rgba(59,130,246,0.12);">🎙️</div>
+                <div class="card-tags">
+                    <span class="tag tag-hot">🔥 Popular</span>
+                    <span class="tag">Speaking</span>
+                </div>
+            </div>
+            <div>
+                <div class="card-title">Read Aloud Master</div>
+                <div class="card-desc">Practice PTE Read Aloud pronunciation with audio guides, phonetic breakdowns, and fluency tips for academic vocabulary.</div>
+            </div>
+            <div class="card-footer">
+                <div class="card-meta">
+                    <span>🎯 PTE Speaking</span>
+                    <span>🔊 Pronunciation</span>
+                </div>
+                <div class="open-arrow">→</div>
+            </div>
+        </a>
+
+        <!-- Tool 2: Perfect Tenses Master -->
+        <a class="tool-card" href="perfect_tenses_master.html" style="--card-accent: #8B5CF6;">
+            <div class="card-top">
+                <div class="card-icon" style="background: rgba(139,92,246,0.12);">⚡</div>
+                <div class="card-tags">
+                    <span class="tag tag-new">✨ New</span>
+                    <span class="tag">Grammar</span>
+                </div>
+            </div>
+            <div>
+                <div class="card-title">Perfect Tenses Master</div>
+                <div class="card-desc">Master all 6 perfect tenses: Present, Past & Future Perfect — Simple and Continuous. 40 interactive exercises with full feedback.</div>
+            </div>
+            <div class="card-footer">
+                <div class="card-meta">
+                    <span>📝 5 Levels</span>
+                    <span>🏆 40 Questions</span>
+                </div>
+                <div class="open-arrow">→</div>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="section-label">Coming Soon</div>
+
+    <div class="grid">
+        <div class="coming-soon">
+            <div class="card-top">
+                <div class="card-icon" style="background:rgba(255,255,255,0.04); font-size:1.4rem;">✍️</div>
+                <span class="cs-badge">Soon</span>
+            </div>
+            <div class="card-title">Essay Writing Templates</div>
+            <div class="card-desc">Structured sentence starters and academic phrases for PTE Write Essay tasks.</div>
+        </div>
+        <div class="coming-soon">
+            <div class="card-top">
+                <div class="card-icon" style="background:rgba(255,255,255,0.04); font-size:1.4rem;">📊</div>
+                <span class="cs-badge">Soon</span>
+            </div>
+            <div class="card-title">Describe Image Vocabulary</div>
+            <div class="card-desc">Key phrases and connectors for describing graphs, charts, and diagrams in PTE Speaking.</div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    Built for PTE Academic preparation · <a href="https://github.com" target="_blank">View on GitHub</a>
+</footer>
+
+</body>
+</html>
